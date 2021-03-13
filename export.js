@@ -3,6 +3,7 @@ const Xvfb      = require('xvfb');
 const fs = require('fs');
 const os = require('os');
 const homedir = os.homedir();
+const downloaddir = homedir + "/Téléchargements";
 const platform = os.platform();
 const { copyToPath, playbackFile } = require('./env');
 const spawn = require('child_process').spawn;
@@ -32,7 +33,7 @@ var options     = {
 }
 
 if(platform == "linux"){
-    options.executablePath = "/usr/bin/google-chrome"
+    options.executablePath = "/usr/bin/chromium-browser"
 }else if(platform == "darwin"){
     options.executablePath = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 }
@@ -119,7 +120,16 @@ async function main() {
 
         await page.waitForSelector('button[class=acorn-play-button]');
         await page.$eval('#navbar', element => element.style.display = "none");
+        await page.$eval('#chat-area', element => element.style.display = "none");
         await page.$eval('#copyright', element => element.style.display = "none");
+        await page.$eval('#side-section', element => {
+                element.classList.remove("small-4");
+                element.classList.add("small-2");
+        });
+        await page.$eval('#main-section', element => {
+                element.classList.remove("small-8");
+                element.classList.add("small-10");
+        });
         await page.$eval('.acorn-controls', element => element.style.opacity = "0");
         await page.click('button[class=acorn-play-button]', {waitUntil: 'domcontentloaded'});
 
@@ -161,7 +171,7 @@ main()
 
 function convertAndCopy(filename){
 
-    var copyFromPath = homedir + "/Downloads";
+    var copyFromPath = downloaddir;
     var onlyfileName = filename.split(".webm")
     var mp4File = onlyfileName[0] + ".mp4"
     var copyFrom = copyFromPath + "/" + filename + ""
@@ -178,7 +188,8 @@ function convertAndCopy(filename){
         [   '-y',
             '-i "' + copyFrom + '"',
             '-c:v libx264',
-            '-preset veryfast',
+            '-preset slow',
+            '-tune stillimage',
             '-movflags faststart',
             '-profile:v high',
             '-level 4.2',
@@ -215,7 +226,7 @@ function convertAndCopy(filename){
 
 function copyOnly(filename){
 
-    var copyFrom = homedir + "/Downloads/" + filename;
+    var copyFrom = downloaddir + filename;
     var copyTo = copyToPath + "/" + filename;
 
     if(!fs.existsSync(copyToPath)){
