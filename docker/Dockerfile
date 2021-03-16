@@ -16,7 +16,7 @@ RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app &&
     add-apt-repository ppa:jonathonf/ffmpeg-4 && \
     apt-get -y install ffmpeg xvfb
 
-RUN git clone https://github.com/rolanddenis/bbb-recorder && \
+RUN git clone https://github.com/GroupeCalcul/bbb-recorder && \
     cd bbb-recorder && \
     npm install --ignore-scripts && \
     cp .env.example .env
