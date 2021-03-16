@@ -3,7 +3,7 @@ const Xvfb      = require('xvfb');
 const fs = require('fs');
 const os = require('os');
 const homedir = os.homedir();
-const downloaddir = homedir + "/Téléchargements";
+const downloaddir = homedir + "/Downloads";
 const platform = os.platform();
 const { copyToPath, playbackFile } = require('./env');
 const spawn = require('child_process').spawn;
@@ -33,7 +33,7 @@ var options     = {
 }
 
 if(platform == "linux"){
-    options.executablePath = "/usr/bin/chromium-browser"
+    options.executablePath = "/usr/bin/google-chrome"
 }else if(platform == "darwin"){
     options.executablePath = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 }
